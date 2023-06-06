@@ -1,12 +1,7 @@
 import webapp2
 import sys
-import json
-import firebase_admin
 
 sys.path.append('modules')
-from firebase_admin import credentials
-from firebase_admin import firestore
-from firebase_admin.firestore import SERVER_TIMESTAMP
 from paste import httpserver
 from base_handler import BaseHandler
 from firebase_module import FirebaseFingerprints
@@ -28,11 +23,11 @@ class Index(BaseHandler):
 app = webapp2.WSGIApplication([
     webapp2.Route('/v1', handler=Index, name='home'),
     webapp2.Route(
-        '/v1/fingerprint/exists', 
+        '/v1/fingerprint/exists',
         handler=ImageProcessingHandler,
         name='home'),
     webapp2.Route(
-        '/v1/fingerprints', 
+        '/v1/fingerprints',
         handler=FingerprintHandler,
         name='fingerprint')
 ], debug=True)

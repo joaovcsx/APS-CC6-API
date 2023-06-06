@@ -15,7 +15,7 @@ class ImageProcessing():
     def __init__(self):
         """ Init class """
         self._image = None
-    
+
     @property
     def image(self):
         """Lease status"""
@@ -30,7 +30,7 @@ class ImageProcessing():
         Format image
         :params dict post_params: {
             uploadFile: File
-        } 
+        }
         """
         try:
             image = post_params.get('uploadFile').value
@@ -48,7 +48,7 @@ class ImageProcessing():
             self.image = img_gray
         except Exception as error:
             raise Exception(error, 400)
-    
+
     def get_pixels(self):
         """
         Get black Pixels from image
@@ -57,9 +57,7 @@ class ImageProcessing():
         try:
             img_height, img_width = self.image.shape
             image_formatted = self.image
-            print 'aqi'
             quadrants_params = self._get_quadrants(img_height, img_width)
-            print 'quienosad'
             quadrants = {}
             count_black_pixels = 0
 
@@ -67,13 +65,13 @@ class ImageProcessing():
                 black_pixels = []
                 for height in range(quadrant['height_min'], quadrant['height_max']):
                     for width in range(quadrant['width_min'], quadrant['width_max']):
-                        if image_formatted[height].item(width) == 0: 
+                        if image_formatted[height].item(width) == 0:
                             black_pixels.append({'x': width, 'y': height})
 
                 name = 'quadrant_{}'.format(idx + 1)
                 count_black_pixels += len(black_pixels)
                 quadrants['{}'.format(name)] = black_pixels
-                
+
             return quadrants, count_black_pixels
         except Exception as error:
             print error
@@ -83,13 +81,13 @@ class ImageProcessing():
         """
         Check if fingerprint exists
         :params list fingerprints: list of dict Fingerprints
-        :return dict fingerprint: Return Fingerprint document if exists 
+        :return dict fingerprint: Return Fingerprint document if exists
         """
         for fingerprint in fingerprints:
             if self.compare_fingerprints(fingerprint['quadrants'], fingerprint['count']):
                 return fingerprint
         return False
-    
+
     def compare_fingerprints(self, quadrants_jwt, count_pixels):
         """
         Compare fingerprints
@@ -126,19 +124,19 @@ class ImageProcessing():
         """
         return [
             {
-                'height_min': 0, 'height_max': int(img_height / 2), 
+                'height_min': 0, 'height_max': int(img_height / 2),
                 'width_min': 0, 'width_max': int(img_width / 2)
             },
             {
-                'height_min': 0, 'height_max': int(img_height / 2), 
+                'height_min': 0, 'height_max': int(img_height / 2),
                 'width_min': int(img_width / 2) + 1, 'width_max': img_width
             },
             {
-                'height_min': int(img_height / 2) + 1, 'height_max': img_height, 
+                'height_min': int(img_height / 2) + 1, 'height_max': img_height,
                 'width_min': 0, 'width_max': int(img_width / 2)
             },
             {
-                'height_min': int(img_height / 2) + 1, 'height_max': img_height, 
+                'height_min': int(img_height / 2) + 1, 'height_max': img_height,
                 'width_min': int(img_width / 2) + 1, 'width_max': img_width
             }
         ]

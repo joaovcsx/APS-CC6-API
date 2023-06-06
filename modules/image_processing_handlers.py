@@ -9,7 +9,6 @@ class ImageProcessingHandler(BaseHandler):
 
     def post(self):
         try:
-            print('\nPOST ImageProcessingHandler')
             request_dict = self.request.POST
             image_processing = ImageProcessing()
             image_processing.format_image(request_dict)
@@ -25,5 +24,4 @@ class ImageProcessingHandler(BaseHandler):
                 self.response_send({'valid': False})
 
         except Exception as error:
-            print error
             self.response_error(error)
